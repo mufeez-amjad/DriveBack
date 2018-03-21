@@ -8,20 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		8F7025FE2061C48C00C25AEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7025FD2061C48C00C25AEB /* AppDelegate.swift */; };
-		8F7026002061C48C00C25AEB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7025FF2061C48C00C25AEB /* ViewController.swift */; };
+		8F7026002061C48C00C25AEB /* Intro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7025FF2061C48C00C25AEB /* Intro.swift */; };
 		8F7026032061C48C00C25AEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F7026012061C48C00C25AEB /* Main.storyboard */; };
 		8F7026052061C48C00C25AEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F7026042061C48C00C25AEB /* Assets.xcassets */; };
 		8F7026082061C48C00C25AEB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F7026062061C48C00C25AEB /* LaunchScreen.storyboard */; };
+		8F7026102062011E00C25AEB /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F70260F2062011E00C25AEB /* SignIn.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8F7025FA2061C48C00C25AEB /* DriveBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DriveBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F7025FD2061C48C00C25AEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8F7025FF2061C48C00C25AEB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8F7025FF2061C48C00C25AEB /* Intro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intro.swift; sourceTree = "<group>"; };
 		8F7026022061C48C00C25AEB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8F7026042061C48C00C25AEB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F7026072061C48C00C25AEB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F7026092061C48C00C25AEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8F70260F2062011E00C25AEB /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +57,8 @@
 			isa = PBXGroup;
 			children = (
 				8F7025FD2061C48C00C25AEB /* AppDelegate.swift */,
-				8F7025FF2061C48C00C25AEB /* ViewController.swift */,
+				8F7025FF2061C48C00C25AEB /* Intro.swift */,
+				8F70260F2062011E00C25AEB /* SignIn.swift */,
 				8F7026012061C48C00C25AEB /* Main.storyboard */,
 				8F7026042061C48C00C25AEB /* Assets.xcassets */,
 				8F7026062061C48C00C25AEB /* LaunchScreen.storyboard */,
@@ -136,7 +139,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F7026002061C48C00C25AEB /* ViewController.swift in Sources */,
+				8F7026002061C48C00C25AEB /* Intro.swift in Sources */,
+				8F7026102062011E00C25AEB /* SignIn.swift in Sources */,
 				8F7025FE2061C48C00C25AEB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +281,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YCDQXE3CNQ;
 				INFOPLIST_FILE = DriveBack/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "mufeez-amjad.DriveBack";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -292,6 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YCDQXE3CNQ;
 				INFOPLIST_FILE = DriveBack/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "mufeez-amjad.DriveBack";
 				PRODUCT_NAME = "$(TARGET_NAME)";
