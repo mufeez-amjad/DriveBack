@@ -13,8 +13,9 @@ class Intro: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red:0.95, green:0.35, blue:0.16, alpha:1.0)
-        // Do any additional setup after loading the view, typically from a nib.
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft))
+        swipeLeft.direction = .left
+        self.view.addGestureRecognizer(swipeLeft)
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,5 +23,9 @@ class Intro: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @objc func swipedLeft() {
+        performSegue(withIdentifier: "toSignIn", sender: self)
+    }
+    
 }
 

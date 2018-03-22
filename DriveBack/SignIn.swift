@@ -59,15 +59,27 @@ class SignIn: UIViewController, UITextFieldDelegate {
             if isValid(email: emailInput.text!) {
                 Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                     if let u = user {
-                        print("user found, go to home screen")
+                        //present main VC
                     }
                     else {
-                        print("user not found")
+                        let alertController = UIAlertController(title: "Failed", message: "Username and password do not match or user does not exist.", preferredStyle: .alert)
+                        let actionOk = UIAlertAction(title: "OK",
+                                                     style: .default,
+                                                     handler: nil)
+                        alertController.addAction(actionOk)
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
                 }
             }
-            else {
-                print("Invalid")
+            else if email.count > 0 && password.count > 0 {
+                let alertController = UIAlertController(title: "Error", message: "Your email address is invalid. Please enter a valid address.", preferredStyle: .alert)
+                let actionOk = UIAlertAction(title: "OK",
+                                             style: .default,
+                                             handler: nil)
+                alertController.addAction(actionOk)
+                
+                self.present(alertController, animated: true, completion: nil)
             }
         }
     }
