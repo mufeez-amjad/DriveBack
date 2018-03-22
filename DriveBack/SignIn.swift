@@ -8,16 +8,24 @@
 
 import Foundation
 import UIKit
+import Firebase
 
-class SignIn: UIViewController {
+class SignIn: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailInput: UITextField!
     @IBOutlet weak var passInput: UITextField!
 
     @IBOutlet weak var signInButton: UIButton!
     
+    var email: String!
+    var password: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //addTestUser()
+        emailInput.delegate = self
+        passInput.delegate = self
         
         signInButton.backgroundColor = UIColor.white
         signInButton.layer.cornerRadius = 10
@@ -28,7 +36,71 @@ class SignIn: UIViewController {
         
         passInput.borderStyle = UITextBorderStyle.roundedRect
         passInput.layer.cornerRadius = 10
-        
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //hides keyboard when view is tapped
+        emailInput.resignFirstResponder()
+        passInput.resignFirstResponder()
+    }
+    
+    func addTestUser(){
+        Auth.auth().createUser(withEmail: "zeefumdajma@gmail.com", password: "abc123") { (user, error) in
+            if error != nil {
+                print(error?.localizedDescription)
+                return
+            }
+        }
+    }
+    
+    @IBAction func signInPressed(_ sender: UIButton?) {
+        
+        if let email = emailInput.text, let password = passInput.text {
+            if isValid(email: emailInput.text!) {
+                Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+                    if let u = user {
+                        print("user found, go to home screen")
+                    }
+                    else {
+                        print("user not found")
+                    }
+                }
+            }
+            else {
+                print("Invalid")
+            }
+        }
+    }
+    
+    func isValid(email: String) -> Bool { //checks if @ appears before .com, .ca, etc.
+        var positionAt = -1
+        var positionDot = -1
+        
+        if let idxAt = email.index(of: "@") {
+            positionAt = email.distance(from: email.startIndex, to: idxAt)
+        }
+        
+        if let idxDot = email.index(of: ".") {
+            positionDot = email.distance(from: email.startIndex, to: idxDot)
+        }
+        
+        return positionDot > positionAt
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let nextTag = textField.tag + 1
+        // Try to find next responder
+        let nextResponder = textField.superview?.viewWithTag(nextTag) as UIResponder!
+        
+        if nextResponder != nil {
+            // Found next responder, so set it
+            nextResponder?.becomeFirstResponder()
+        } else {
+            // Not found, so remove keyboard
+            textField.resignFirstResponder()
+            signInPressed(nil)
+        }
+        
+        return false
+    }
 }
