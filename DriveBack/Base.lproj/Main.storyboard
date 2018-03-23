@@ -32,13 +32,13 @@
                                 <gestureRecognizers/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="swipeLeft" translatesAutoresizingMaskIntoConstraints="NO" id="tDU-37-kV8">
-                                <rect key="frame" x="137" y="607" width="100" height="37"/>
+                                <rect key="frame" x="145" y="603" width="84" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Communicate with other drivers using their license plate! " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eps-kA-FsB">
-                                <rect key="frame" x="25" y="532" width="325" height="63"/>
+                                <rect key="frame" x="25" y="537" width="325" height="63"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" red="0.94292229413986206" green="0.35001808404922485" blue="0.16276058554649353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -47,7 +47,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <segue destination="y9C-Tb-cpw" kind="show" identifier="toSignIn" customClass="SegueFromRight" customModule="DriveBack" customModuleProvider="target" id="3l9-BU-5wK"/>
+                        <segue destination="y9C-Tb-cpw" kind="custom" identifier="toSignIn" customClass="SegueFromRight" customModule="DriveBack" customModuleProvider="target" id="3l9-BU-5wK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -91,6 +91,9 @@
                                 <state key="normal" title="Create a new account">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <segue destination="Uz2-UM-ef1" kind="show" id="jYV-FK-V2t"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V1J-ja-dEx">
                                 <rect key="frame" x="65" y="452" width="244" height="36"/>
@@ -119,18 +122,171 @@
                         <outlet property="emailInput" destination="C4E-kW-cMZ" id="sy4-Uz-VWM"/>
                         <outlet property="passInput" destination="BBI-V2-GYz" id="8x6-Tm-HYA"/>
                         <outlet property="signInButton" destination="V1J-ja-dEx" id="oc2-jq-aYj"/>
+                        <segue destination="C7k-sz-xbq" kind="custom" identifier="toMain" customClass="SegueFromRight" customModule="DriveBack" customModuleProvider="target" id="XAX-hK-zyX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ag3-7G-Q1X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="672.79999999999995" y="31.934032983508249"/>
+            <point key="canvasLocation" x="609" y="32"/>
+        </scene>
+        <!--Register-->
+        <scene sceneID="8Ra-1c-CWK">
+            <objects>
+                <viewController title="Register" id="Uz2-UM-ef1" customClass="Register" customModule="DriveBack" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qNq-V4-eUQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="orange" translatesAutoresizingMaskIntoConstraints="NO" id="Reo-ff-8Cl">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="combW" translatesAutoresizingMaskIntoConstraints="NO" id="xiY-jt-7RN">
+                                <rect key="frame" x="100" y="87" width="174" height="125"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OqI-b0-KMg">
+                                <rect key="frame" x="20" y="30" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="X" image="xIcon"/>
+                                <connections>
+                                    <action selector="xPressed:" destination="Uz2-UM-ef1" eventType="touchDown" id="UWw-lX-3dn"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oVX-JV-KXp" customClass="RegisterTextField" customModule="DriveBack" customModuleProvider="target">
+                                <rect key="frame" x="37" y="271" width="151" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CqR-fq-Khi" customClass="RegisterTextField" customModule="DriveBack" customModuleProvider="target">
+                                <rect key="frame" x="187" y="271" width="150" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="TYA-EG-tZi" customClass="RegisterTextField" customModule="DriveBack" customModuleProvider="target">
+                                <rect key="frame" x="37" y="320" width="300" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="License Plate Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="neB-cb-moU" customClass="RegisterTextField" customModule="DriveBack" customModuleProvider="target">
+                                <rect key="frame" x="37" y="369" width="181" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="flp-ll-Jvq" customClass="RegisterTextField" customModule="DriveBack" customModuleProvider="target">
+                                <rect key="frame" x="37" y="418" width="300" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <textField opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="State/Province" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iLk-o8-eGs" customClass="RegisterTextField" customModule="DriveBack" customModuleProvider="target">
+                                <rect key="frame" x="217" y="369" width="120" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="By clicking the button below, you agree to the Terms &amp; Conditions." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4zu-QJ-U7Q">
+                                <rect key="frame" x="52" y="505" width="271" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AZe-be-Okn">
+                                <rect key="frame" x="37" y="573" width="300" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Create New Account">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="createAccPressed:" destination="Uz2-UM-ef1" eventType="touchDown" id="51U-w0-A8T"/>
+                                    <action selector="signInPressed:" destination="y9C-Tb-cpw" eventType="touchDown" id="wTO-Nr-wBn"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="1aF-u4-PlR"/>
+                    </view>
+                    <connections>
+                        <outlet property="createAccButton" destination="AZe-be-Okn" id="Fli-hf-PUh"/>
+                        <outlet property="emailInput" destination="TYA-EG-tZi" id="pds-yn-ESb"/>
+                        <outlet property="fNameInput" destination="oVX-JV-KXp" id="hDS-Me-kpX"/>
+                        <outlet property="lNameInput" destination="CqR-fq-Khi" id="ZA2-kZ-oRP"/>
+                        <outlet property="licenseInput" destination="neB-cb-moU" id="7EP-ql-dzN"/>
+                        <outlet property="passInput" destination="flp-ll-Jvq" id="14f-97-7oD"/>
+                        <outlet property="stateInput" destination="iLk-o8-eGs" id="RwC-Hf-hEg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bL7-Iq-TTa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="608.79999999999995" y="706.59670164917543"/>
+        </scene>
+        <!--Main-->
+        <scene sceneID="wX6-GM-kJR">
+            <objects>
+                <viewController title="Main" id="C7k-sz-xbq" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pR8-kq-y3C">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="orange" translatesAutoresizingMaskIntoConstraints="NO" id="0OB-uu-UPC">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="92"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="wordW" translatesAutoresizingMaskIntoConstraints="NO" id="imr-8L-D52">
+                                <rect key="frame" x="116" y="34" width="142" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jot-EV-miG">
+                                <rect key="frame" x="329" y="41" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="S" image="settings"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mul-Tw-SsW">
+                                <rect key="frame" x="277" y="570" width="93" height="93"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="newMessage"/>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NAw-dt-XMK">
+                                <rect key="frame" x="23" y="107" width="329" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="" image="received"/>
+                                    <segment title="" image="sent"/>
+                                </segments>
+                                <color key="tintColor" red="0.94292229413986206" green="0.35001808404922485" blue="0.16276058554649353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="ffi-mM-T4z"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AVx-hP-fgs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1317.5999999999999" y="31.934032983508249"/>
         </scene>
     </scenes>
     <resources>
         <image name="combW" width="1019" height="731"/>
+        <image name="newMessage" width="210" height="209"/>
         <image name="orange" width="721" height="1281"/>
+        <image name="received" width="17" height="17"/>
+        <image name="sent" width="17" height="17"/>
+        <image name="settings" width="209" height="209"/>
         <image name="swipeLeft" width="418" height="156"/>
         <image name="white" width="721" height="1281"/>
         <image name="wordW" width="1232" height="391"/>
+        <image name="xIcon" width="209" height="209"/>
     </resources>
 </document>
