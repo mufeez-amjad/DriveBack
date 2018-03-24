@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Register: UIViewController {
+class Register: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var fNameInput: UITextField!
     @IBOutlet weak var lNameInput: UITextField!
@@ -34,6 +34,14 @@ class Register: UIViewController {
         createAccButton.backgroundColor = UIColor.white
         createAccButton.layer.cornerRadius = 10
         createAccButton.setTitleColor(UIColor(red:0.95, green:0.35, blue:0.16, alpha:1.0), for: .normal)
+        
+        fNameInput.delegate = self
+        lNameInput.delegate = self
+        emailInput.delegate = self
+        passInput.delegate = self
+        licenseInput.delegate = self
+        stateInput.delegate = self
+
     }
     
     func isValid(email: String, password: String, fN: String, lN: String, license: String, state: String) -> Bool{ //1
@@ -60,6 +68,16 @@ class Register: UIViewController {
     
     @IBAction func xPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //hides keyboard when view is tapped
+        fNameInput.resignFirstResponder()
+        lNameInput.resignFirstResponder()
+        emailInput.resignFirstResponder()
+        passInput.resignFirstResponder()
+        licenseInput.resignFirstResponder()
+        stateInput.resignFirstResponder()
     }
     
     @IBAction func createAccPressed(_ sender: Any) {
@@ -99,4 +117,33 @@ class Register: UIViewController {
             }
         }
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let nextTag = textField.tag + 1
+        // Try to find next responder
+        let nextResponder = textField.superview?.viewWithTag(nextTag) as UIResponder!
+        
+        if nextResponder != nil {
+            // Found next responder, so set it
+            nextResponder?.becomeFirstResponder()
+        } else {
+            // Not found, so remove keyboard
+            textField.resignFirstResponder()
+        }
+        
+        return false
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.frame.origin.y = -100 // Move view 150 points upward
+        }, completion: nil)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.frame.origin.y = 0 // Move view to original position
+        }, completion: nil)
+    }
+    
 }

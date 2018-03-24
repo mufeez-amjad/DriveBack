@@ -23,7 +23,7 @@ class RegisterTextField: UITextField{
         self.backgroundColor = UIColor.white
         
         //Text
-        self.textColor = UIColor(red:0.81, green:0.81, blue:0.81, alpha:1.0)
+        self.textColor = UIColor(red:0.56, green:0.56, blue:0.56, alpha:1.0)
         
         //Inset to right
         let paddingView = UIView(frame: CGRect(x: 0,y: 0,width: 8,height: self.frame.height))
