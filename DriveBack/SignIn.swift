@@ -84,19 +84,11 @@ class SignIn: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func isValid(email: String) -> Bool { //checks if @ appears before .com, .ca, etc.
-        var positionAt = -1
-        var positionDot = -1
+    func isValid(email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
-        if let idxAt = email.index(of: "@") {
-            positionAt = email.distance(from: email.startIndex, to: idxAt)
-        }
-        
-        if let idxDot = email.index(of: ".") {
-            positionDot = email.distance(from: email.startIndex, to: idxDot)
-        }
-        
-        return positionDot > positionAt
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: email)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

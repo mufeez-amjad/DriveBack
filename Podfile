@@ -8,7 +8,8 @@ target 'DriveBack' do
   # Pods for DriveBack
 
   pod 'Firebase/Core'
-  pod 'Firebase/Database'
+  pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
+
 
 end

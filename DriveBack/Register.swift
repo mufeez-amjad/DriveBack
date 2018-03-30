@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class Register: UIViewController, UITextFieldDelegate {
     
@@ -28,7 +29,9 @@ class Register: UIViewController, UITextFieldDelegate {
     var lNameValid = false
     var licenseValid = false
     var stateValid = false
-
+    
+    var db: Firestore!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         createAccButton.backgroundColor = UIColor.white
@@ -41,22 +44,21 @@ class Register: UIViewController, UITextFieldDelegate {
         passInput.delegate = self
         licenseInput.delegate = self
         stateInput.delegate = self
-
+        
+        // [START setup]
+        let settings = FirestoreSettings()
+        
+        Firestore.firestore().settings = settings
+        // [END setup]
+        db = Firestore.firestore()
     }
     
     func isValid(email: String, password: String, fN: String, lN: String, license: String, state: String) -> Bool{ //1
-        //checks if @ appears before .com, .ca, etc.
-        var positionAt = -1
-        var positionDot = -1
-            
-        if let idxAt = email.index(of: "@") {
-            positionAt = email.distance(from: email.startIndex, to: idxAt)
-        }
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
-        if let idxDot = email.index(of: ".") {
-            positionDot = email.distance(from: email.startIndex, to: idxDot)
-        }
-        emailValid = positionDot > positionAt
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        emailValid = emailTest.evaluate(with: email)
+        
         passValid = password.count > 3
         fNameValid = fN.count >= 2
         lNameValid = lN.count >= 2
@@ -84,7 +86,31 @@ class Register: UIViewController, UITextFieldDelegate {
         if let email = emailInput.text, let password = passInput.text, let fName = fNameInput.text, let lName = lNameInput.text, let license = licenseInput.text, let state = stateInput.text {
             
             if isValid(email: email, password: password, fN: fName, lN: lName, license: license, state: state) {
-                
+                Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+                    if error != nil {
+                        print(error?.localizedDescription)
+                        return
+                    }
+                    else {
+                        // Add a new document with a generated ID
+                        var userId = Auth.auth().currentUser?.uid
+                        self.db.collection("users").document(userId!).setData([
+                            "first": fName,
+                            "last": lName,
+                            "license": "\(license)\(state)"
+                        ]) { err in
+                            if let err = err {
+                                print("Error writing document: \(err)")
+                            } else {
+                                weak var pvc = self.presentingViewController
+                                
+                                self.dismiss(animated: true) { //dismisses to sign in, then segues to main
+                                    pvc?.performSegue(withIdentifier: "toMain", sender: nil)
+                                }
+                            }
+                        }
+                    }
+                }
             }
             
             else {
@@ -103,7 +129,7 @@ class Register: UIViewController, UITextFieldDelegate {
                     message += "Please enter valid license plate number. "
                 }
                 if !stateValid {
-                    message += "Please enter valid state/province abbreviation."
+                    message += "Please enter valid 2 letter state/province abbreviation."
                 }
                 
                 let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
