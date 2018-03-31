@@ -23,6 +23,10 @@ class Register: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var createAccButton: UIButton!
     
+    @IBOutlet weak var logo: UIImageView!
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     var emailValid = false
     var passValid = false
     var fNameValid = false
@@ -51,6 +55,9 @@ class Register: UIViewController, UITextFieldDelegate {
         Firestore.firestore().settings = settings
         // [END setup]
         db = Firestore.firestore()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        self.view.addGestureRecognizer(tap)
     }
     
     func isValid(email: String, password: String, fN: String, lN: String, license: String, state: String) -> Bool{ //1
@@ -72,8 +79,7 @@ class Register: UIViewController, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //hides keyboard when view is tapped
+    @objc func viewTapped(){
         fNameInput.resignFirstResponder()
         lNameInput.resignFirstResponder()
         emailInput.resignFirstResponder()
@@ -117,7 +123,7 @@ class Register: UIViewController, UITextFieldDelegate {
                 var message = ""
                 
                 if !fNameValid || !lNameValid {
-                    message += "Please enter valid name. "
+                    message += "Please enter a valid name. "
                 }
                 if !emailValid {
                     message += "Please enter a valid email address. "
@@ -126,10 +132,10 @@ class Register: UIViewController, UITextFieldDelegate {
                     message += "Please enter a secure password. "
                 }
                 if !licenseValid {
-                    message += "Please enter valid license plate number. "
+                    message += "Please enter a valid license plate number. "
                 }
                 if !stateValid {
-                    message += "Please enter valid 2 letter state/province abbreviation."
+                    message += "Please enter a valid 2 letter state/province abbreviation."
                 }
                 
                 let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
@@ -139,7 +145,6 @@ class Register: UIViewController, UITextFieldDelegate {
                 alertController.addAction(actionOk)
                     
                 self.present(alertController, animated: true, completion: nil)
-                
             }
         }
     }
@@ -154,6 +159,8 @@ class Register: UIViewController, UITextFieldDelegate {
             nextResponder?.becomeFirstResponder()
         } else {
             // Not found, so remove keyboard
+            let nextResponder = textField.superview?.viewWithTag(nextTag) as UIResponder!
+            
             textField.resignFirstResponder()
         }
         
@@ -161,15 +168,11 @@ class Register: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.view.frame.origin.y = -100 // Move view 150 points upward
-        }, completion: nil)
+        scrollView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.view.frame.origin.y = 0 // Move view to original position
-        }, completion: nil)
+        scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
     
 }

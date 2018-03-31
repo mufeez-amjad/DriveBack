@@ -11,6 +11,8 @@
 		8F20132B2064650D00F8BE64 /* SegueFromRight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F20132A2064650D00F8BE64 /* SegueFromRight.swift */; };
 		8F20132D2064A43C00F8BE64 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F20132C2064A43C00F8BE64 /* Register.swift */; };
 		8F2013312064AC0100F8BE64 /* RegisterTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2013302064AC0100F8BE64 /* RegisterTextField.swift */; };
+		8F3372D5206ECFD4000B01CC /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3372D4206ECFD4000B01CC /* Main.swift */; };
+		8F3372D7206ED252000B01CC /* Compose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3372D6206ED252000B01CC /* Compose.swift */; };
 		8F7025FE2061C48C00C25AEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7025FD2061C48C00C25AEB /* AppDelegate.swift */; };
 		8F7026002061C48C00C25AEB /* Intro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7025FF2061C48C00C25AEB /* Intro.swift */; };
 		8F7026032061C48C00C25AEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F7026012061C48C00C25AEB /* Main.storyboard */; };
@@ -25,6 +27,8 @@
 		8F20132A2064650D00F8BE64 /* SegueFromRight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueFromRight.swift; sourceTree = "<group>"; };
 		8F20132C2064A43C00F8BE64 /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		8F2013302064AC0100F8BE64 /* RegisterTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTextField.swift; sourceTree = "<group>"; };
+		8F3372D4206ECFD4000B01CC /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		8F3372D6206ED252000B01CC /* Compose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compose.swift; sourceTree = "<group>"; };
 		8F7025FA2061C48C00C25AEB /* DriveBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DriveBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F7025FD2061C48C00C25AEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F7025FF2061C48C00C25AEB /* Intro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intro.swift; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 				8F70260F2062011E00C25AEB /* SignIn.swift */,
 				8F20132A2064650D00F8BE64 /* SegueFromRight.swift */,
 				8F20132C2064A43C00F8BE64 /* Register.swift */,
+				8F3372D4206ECFD4000B01CC /* Main.swift */,
+				8F3372D6206ED252000B01CC /* Compose.swift */,
 				8F2013302064AC0100F8BE64 /* RegisterTextField.swift */,
 				8F7026012061C48C00C25AEB /* Main.storyboard */,
 				8F7026042061C48C00C25AEB /* Assets.xcassets */,
@@ -256,6 +262,8 @@
 				8F2013312064AC0100F8BE64 /* RegisterTextField.swift in Sources */,
 				8F20132B2064650D00F8BE64 /* SegueFromRight.swift in Sources */,
 				8F7025FE2061C48C00C25AEB /* AppDelegate.swift in Sources */,
+				8F3372D5206ECFD4000B01CC /* Main.swift in Sources */,
+				8F3372D7206ED252000B01CC /* Compose.swift in Sources */,
 				8F20132D2064A43C00F8BE64 /* Register.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
