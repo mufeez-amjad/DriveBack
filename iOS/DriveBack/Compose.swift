@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import Firebase
 import SocketIO
 
 class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
@@ -83,6 +82,8 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        recipientInput.becomeFirstResponder() //opens keyboard
+        
         socket.connect()
         
         self.socket.on("connect") {data, ack in

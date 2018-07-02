@@ -9,8 +9,11 @@
 import Foundation
 import UIKit
 import Firebase
+import SocketIO
 
 class Register: UIViewController, UITextFieldDelegate {
+    
+     let defaults = UserDefaults.standard
     
     @IBOutlet weak var fNameInput: UITextField!
     @IBOutlet weak var lNameInput: UITextField!
@@ -36,8 +39,20 @@ class Register: UIViewController, UITextFieldDelegate {
     
     //var db: Firestore!
     
+    let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
+    var socket: SocketIOClient!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        socket.connect()
+        
+        self.socket.on("connect") {data, ack in
+            print("socket connected")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         createAccButton.backgroundColor = UIColor.white
         createAccButton.layer.cornerRadius = 10
         createAccButton.setTitleColor(UIColor(red:0.95, green:0.35, blue:0.16, alpha:1.0), for: .normal)
@@ -49,6 +64,8 @@ class Register: UIViewController, UITextFieldDelegate {
         licenseInput.delegate = self
         stateInput.delegate = self
         
+        socket = manager.defaultSocket
+
         /*
         // [START setup]
         let settings = FirestoreSettings()
@@ -97,11 +114,40 @@ class Register: UIViewController, UITextFieldDelegate {
                 Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
                     if error != nil {
                         print(error?.localizedDescription)
+                        let alertController = UIAlertController(title: "Error", message: "An account with that email already exists", preferredStyle: .alert)
+                        let actionOk = UIAlertAction(title: "OK",
+                                                     style: .default,
+                                                     handler: nil)
+                        alertController.addAction(actionOk)
+                        
+                        self.present(alertController, animated: true, completion: nil)
                         return
                     }
                     else {
                         // Add a new document with a generated ID
                         var userId = Auth.auth().currentUser?.uid
+                        self.defaults.set(userId, forKey: "UID")
+                        self.defaults.set(fName, forKey: "fName")
+                        self.defaults.set(lName, forKey: "lName")
+                        self.defaults.set("\(license)\(state)", forKey: "plate")
+
+                        let user: [Any]  = [
+                            [
+                                "uid": userId,
+                                "First": fName,
+                                "Last": lName,
+                                "Plate": "\(license)\(state)"
+                            ]
+                        ]
+                        self.socket.emit("newUser", user)
+                        
+                        weak var pvc = self.presentingViewController
+                        
+                        //dismisses to sign in, then segues to main
+                        self.dismiss(animated: true) {
+                            pvc?.performSegue(withIdentifier: "toMain", sender: nil)
+                        }
+                            
                         /*
                         self.db.collection("users").document(userId!).setData([
                             "first": fName,
