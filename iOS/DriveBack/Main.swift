@@ -27,24 +27,15 @@ class Main: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var messages = ["Lorem ipsum dolor sit amet, consectetur...", "Lorem ipsum dolor sit amet, consectetur...", "Lorem ipsum dolor sit amet, consectetur..."]
     var times = ["9:10 pm", "9:05 pm", "9:00 pm"]
     
-    let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
     var socket: SocketIOClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        socket = AppDelegate.socket
+        
         tableView.delegate = self
         tableView.dataSource = self
-        
-        socket = manager.defaultSocket
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        socket.connect()
-        
-        self.socket.on("connect") {data, ack in
-            print("socket connected")
-        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

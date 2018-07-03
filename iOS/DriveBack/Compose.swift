@@ -20,12 +20,11 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     //let db = Firestore.firestore()
     
-    let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
     var socket: SocketIOClient!
     
     override func viewDidLoad() {
-        socket = manager.defaultSocket
-        
+        socket = AppDelegate.socket
+
         recipientInput.becomeFirstResponder()
         
         messageInput.delegate = self
@@ -83,11 +82,5 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         recipientInput.becomeFirstResponder() //opens keyboard
-        
-        socket.connect()
-        
-        self.socket.on("connect") {data, ack in
-            print("socket connected")
-        }
     }
 }

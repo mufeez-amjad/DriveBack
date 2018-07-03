@@ -13,7 +13,7 @@ import SocketIO
 
 class Register: UIViewController, UITextFieldDelegate {
     
-     let defaults = UserDefaults.standard
+    let defaults = UserDefaults.standard
     
     @IBOutlet weak var fNameInput: UITextField!
     @IBOutlet weak var lNameInput: UITextField!
@@ -37,21 +37,13 @@ class Register: UIViewController, UITextFieldDelegate {
     var licenseValid = false
     var stateValid = false
     
-    //var db: Firestore!
     
-    let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
     var socket: SocketIOClient!
-    
-    override func viewDidAppear(_ animated: Bool) {
-        socket.connect()
-        
-        self.socket.on("connect") {data, ack in
-            print("socket connected")
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        socket = AppDelegate.socket
         
         createAccButton.backgroundColor = UIColor.white
         createAccButton.layer.cornerRadius = 10
@@ -64,16 +56,6 @@ class Register: UIViewController, UITextFieldDelegate {
         licenseInput.delegate = self
         stateInput.delegate = self
         
-        socket = manager.defaultSocket
-
-        /*
-        // [START setup]
-        let settings = FirestoreSettings()
-        
-        Firestore.firestore().settings = settings
-        // [END setup]
-        db = Firestore.firestore()
-         */
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         self.view.addGestureRecognizer(tap)
