@@ -2,12 +2,9 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
-const crypto = require("crypto");
 
 var admin = require("firebase-admin");
-//serviceAccountKey.json
 var serviceAccount = require("./serviceAccountKey.json");
-
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -22,24 +19,17 @@ var db = admin.firestore();
 server.listen(process.env.PORT || 3000);
 console.log('Server running...');
 
-/*TODO: 
-check if conversation already exists from compose screen, add to existing instead of making new one
-go through all the conversations in profile
-check to see if it's not with same person
-if it is, add it to the conversation
-*/
-
 io.sockets.on('connection', function (socket) {
     connections.push(socket);
-    console.log('Connected: %s sockets connected', connections.length);
+    //console.log('Connected: %s sockets connected', connections.length);
 
     socket.on('newMessage', function (data) {
         var date = new Date().toLocaleDateString();
         var time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric"});
         var dateNTime = date + ' ' + time;
 
-        let from = data[0].from;
-        let to = data[0].to;
+        let from = data[0].from.toUpperCase();
+        let to = data[0].to.toUpperCase();
         
         var messageJSON = {
             from: from,
@@ -47,114 +37,74 @@ io.sockets.on('connection', function (socket) {
             time: dateNTime
         };
 
-        var convoExists = false
+        var usersRef = db.collection('users');
+        var convosRef = db.collection('conversations');
+
+
+        //check all convos
+        //check to see if already exists with receiver
+        //add to existing convo
+        //if no convos are to receiver, make a new one
 
         var checkConvos = usersRef.doc(from).get()
                 .then(doc => {
-                    data = doc.data()
-                    var convos = data.Conversations
-                    for (var id in data){
-                        if (data.hasOwnProperty(id)) {
-                            
-                            var checkConvo = usersRef.doc(id).get()
-                                .then(doc => {
-                                    if (!doc.exists) {
-                                        //creates new user document with conversation
+                    data = doc.data();
+                    var convos = data.conversations;
 
-                                        var data = { 
-                                            UID: "",
-                                            First: "",
-                                            Last: "",
-                                            Conversations: [ref.id]
-                                        };
+                    var convoExists = false;
 
-                                        var setDoc = usersRef.doc(to).set(data); 
-
-                                    } else {
-                                        data = doc.data()
-                                        var convos = data.Conversations
-                                        convos.append(ref.id)
-                                        var updateSingle = usersRef.doc(to).update({ Conversations: convos });
+                    for (var i in convos) {
+                        var id = convos[i];
+                        
+                        var checkConvo = convosRef.doc(id).get()
+                            .then(doc => {
+                                data = doc.data();
+                                    //if convo already exists with recipient
+                                    if (data.to == to){
+                                        convoExists = true;
+                                        
+                                        //update the messages and time in the conversation
+                                        var messagesArray = data.messages;
+                                        messagesArray.push(messageJSON);
+                                        var updateMany = convosRef.doc(id).update({
+                                            time: dateNTime,
+                                            messages: messagesArray,
+                                        });
                                     }
-                                })
-                                .catch(err => {
-                                    console.log('Error getting document', err);
-                                });
-                            console.log(someObject[prop]);
+                            })
+                            .catch(err => {
+                                console.log('Error getting conversation', err);
+                            });
+                        if (convoExists) break;
+                    }
 
-                        }
-                     }
+                    if (!convoExists) {
+                        addMessage(from, to, dateNTime, messageJSON);
+                        console.log('Created new conversation!')
+                    }
 
                 })
                 .catch(err => {
-                    console.log('Error getting document', err);
+                    console.log('Error getting user', err);
                 });
-
-        var newMessage = db.collection('conversations').add({
-            from: from,
-            to: to,
-            time: dateNTime,
-            messages: [messageJSON]
-          }).then(ref => {
-
-            //dismiss client screen only if message sent successfully
-
-            var usersRef = db.collection('users');
-
-            //add to sender
-            var getConvos = usersRef.doc(from).get()
-                .then(doc => {
-                    data = doc.data()
-                    var convos = data.Conversations
-                    convos.push(ref.id)
-                    var updateSingle = usersRef.doc(from).update({ Conversations: convos });
-                })
-                .catch(err => {
-                    console.log('Error getting document', err);
-                });
-
-            //add to receiver (could not exist)
-            var getConvos = usersRef.doc(to).get()
-            .then(doc => {
-                if (!doc.exists) {
-                    //creates new user document with conversation
-
-                    var data = { 
-                        UID: "",
-                        First: "",
-                        Last: "",
-                        Conversations: [ref.id]
-                    };
-
-                    var setDoc = usersRef.doc(to).set(data); 
-
-                } else {
-                    data = doc.data()
-                    var convos = data.Conversations
-                    convos.append(ref.id)
-                    var updateSingle = usersRef.doc(to).update({ Conversations: convos });
-                }
-            })
-            .catch(err => {
-                console.log('Error getting document', err);
-            });
-
-          });
-
     });
 
     socket.on('newUser', function (data) {
-        var plate = data[0].Plate
+
+        //TODO: don't overwrite existing user with convos
+        //TODO: send signal to close sign up window iOS
+
+        var plate = data[0].Plate.toUpperCase();
         
         //formats input correctly
         let fName = data[0].First.charAt(0).toUpperCase() + data[0].First.slice(1).toLowerCase();
         let lName = data[0].Last.charAt(0).toUpperCase() + data[0].Last.slice(1).toLowerCase();
 
         var data = { 
-            UID: data[0].uid,
-            First: fName,
-            Last: lName,
-            Conversations: []
+            uid: data[0].uid,
+            first: fName,
+            last: lName,
+            conversations: []
         };
           
           var setDoc = db.collection('users').doc(plate).set(data);
@@ -163,6 +113,61 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('disconnect', function (data) {
         connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s sockets connected', connections.length);
+        //console.log('Disconnected: %s sockets connected', connections.length);
     });
 });
+
+function addMessage(from, to, dateNTime, messageJSON){
+
+    var newMessage = db.collection('conversations').add({
+        from: from,
+        to: to,
+        time: dateNTime,
+        messages: [messageJSON]
+      }).then(ref => {
+
+        //dismiss client screen only if message sent successfully
+        //socket.emit("sent")
+
+        var usersRef = db.collection('users');
+
+        //add to sender
+        var getConvos = usersRef.doc(from).get()
+            .then(doc => {
+                data = doc.data()
+                var convos = data.conversations
+                convos.push(ref.id)
+                var updateSingle = usersRef.doc(from).update({ conversations: convos });
+            })
+            .catch(err => {
+                console.log('Error getting document', err);
+            });
+
+        //add to receiver (could not exist)
+        var getConvos = usersRef.doc(to).get()
+        .then(doc => {
+            if (!doc.exists) {
+                //creates new user document with conversation
+
+                var data = { 
+                    uid: "",
+                    first: "",
+                    last: "",
+                    conversations: [ref.id]
+                };
+
+                var setDoc = usersRef.doc(to).set(data); 
+
+            } else {
+                data = doc.data()
+                var convos = data.conversations
+                convos.push(ref.id)
+                var updateSingle = usersRef.doc(to).update({ conversations: convos });
+            }
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+
+      });
+} 
