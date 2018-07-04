@@ -19,6 +19,8 @@
 		8F7026052061C48C00C25AEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F7026042061C48C00C25AEB /* Assets.xcassets */; };
 		8F7026082061C48C00C25AEB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F7026062061C48C00C25AEB /* LaunchScreen.storyboard */; };
 		8F7026102062011E00C25AEB /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F70260F2062011E00C25AEB /* SignIn.swift */; };
+		8F9B8E1820ED85CA0077F595 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9B8E1720ED85CA0077F595 /* KeychainWrapper.swift */; };
+		8F9B8E1A20ED85DA0077F595 /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9B8E1920ED85DA0077F595 /* KeychainItemAccessibility.swift */; };
 		8FB924812063465F00E5BC6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8FB924802063465F00E5BC6F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +39,8 @@
 		8F7026072061C48C00C25AEB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F7026092061C48C00C25AEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F70260F2062011E00C25AEB /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
+		8F9B8E1720ED85CA0077F595 /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
+		8F9B8E1920ED85DA0077F595 /* KeychainItemAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItemAccessibility.swift; sourceTree = "<group>"; };
 		8FB924802063465F00E5BC6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9F60DEBE26403A7DAF48AD28 /* Pods-DriveBack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriveBack.release.xcconfig"; path = "Pods/Target Support Files/Pods-DriveBack/Pods-DriveBack.release.xcconfig"; sourceTree = "<group>"; };
 		E4906A050C7AA18E8732E9D2 /* Pods-DriveBack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriveBack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DriveBack/Pods-DriveBack.debug.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 			children = (
 				8F7025FD2061C48C00C25AEB /* AppDelegate.swift */,
 				8F7025FF2061C48C00C25AEB /* Intro.swift */,
+				8F9B8E1720ED85CA0077F595 /* KeychainWrapper.swift */,
+				8F9B8E1920ED85DA0077F595 /* KeychainItemAccessibility.swift */,
 				8F70260F2062011E00C25AEB /* SignIn.swift */,
 				8F20132A2064650D00F8BE64 /* SegueFromRight.swift */,
 				8F20132C2064A43C00F8BE64 /* Register.swift */,
@@ -231,8 +237,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F9B8E1820ED85CA0077F595 /* KeychainWrapper.swift in Sources */,
 				8F7026002061C48C00C25AEB /* Intro.swift in Sources */,
 				8F7026102062011E00C25AEB /* SignIn.swift in Sources */,
+				8F9B8E1A20ED85DA0077F595 /* KeychainItemAccessibility.swift in Sources */,
 				8F2013312064AC0100F8BE64 /* RegisterTextField.swift in Sources */,
 				8F20132B2064650D00F8BE64 /* SegueFromRight.swift in Sources */,
 				8F7025FE2061C48C00C25AEB /* AppDelegate.swift in Sources */,

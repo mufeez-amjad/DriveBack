@@ -12,6 +12,8 @@ import Firebase
 
 class SignIn: UIViewController, UITextFieldDelegate {
     
+    let defaults = UserDefaults.standard
+    
     @IBOutlet weak var emailInput: UITextField!
     @IBOutlet weak var passInput: UITextField!
 
@@ -60,6 +62,7 @@ class SignIn: UIViewController, UITextFieldDelegate {
                 Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                     if let u = user {
                         self.performSegue(withIdentifier: "toMain", sender: self)
+                        self.defaults.set(true, forKey: "isUserLoggedIn")
                     }
                     else {
                         let alertController = UIAlertController(title: "Failed", message: "Username and password do not match or the account does not exist.", preferredStyle: .alert)

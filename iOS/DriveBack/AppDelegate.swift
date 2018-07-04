@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+    let defaults = UserDefaults.standard
+
     let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
     static var socket: SocketIOClient!
     
@@ -24,6 +26,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AppDelegate.socket = manager.defaultSocket
         AppDelegate.socket.connect()
+        
+        //let userLoginStatus = defaults.bool(forKey: "isUserLoggedIn")
+        let userLoginStatus = false
+        
+        if (userLoginStatus) {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            
+            // Assuming your storyboard is named "Main"
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+
+            let vc: Main = mainStoryboard.instantiateViewController(withIdentifier: "Main") as! Main
+            self.window?.rootViewController = vc
+            self.window?.makeKeyAndVisible()
+        }
         
         return true
     }

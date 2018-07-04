@@ -26,6 +26,8 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     var plate: String!
     
+    var status = "failed"
+    
     override func viewDidLoad() {
         socket = AppDelegate.socket
         
@@ -83,7 +85,31 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
             ]
             socket.emit("newMessage", data)
         }
-        self.dismiss(animated: true, completion: nil)
+        
+        _ = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.presentError), userInfo: nil, repeats: false)
+        
+        socket.on("messageStatus") { data, ack in
+            
+            guard let st = data[0] as? String else { return }
+            self.status = st
+            
+            if self.status == "sent" {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    @objc func presentError(){
+        if (status == "failed"){
+            let alertController = UIAlertController(title: "Error", message: "An error occured and the message could not be sent.", preferredStyle: .alert)
+            let actionOk = UIAlertAction(title: "OK",
+                                         style: .default,
+                                         handler: nil)
+            alertController.addAction(actionOk)
+            
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

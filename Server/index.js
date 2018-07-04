@@ -19,80 +19,25 @@ var db = admin.firestore();
 server.listen(process.env.PORT || 3000);
 console.log('Server running...');
 
+let usersRef = db.collection('users');
+let convosRef = db.collection('conversations');
+
 io.sockets.on('connection', function (socket) {
     connections.push(socket);
     //console.log('Connected: %s sockets connected', connections.length);
 
     socket.on('newMessage', function (data) {
-        var date = new Date().toLocaleDateString();
-        var time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric"});
-        var dateNTime = date + ' ' + time;
-
-        let from = data[0].from.toUpperCase();
-        let to = data[0].to.toUpperCase();
-        
-        var messageJSON = {
-            from: from,
-            message: data[0].message,
-            time: dateNTime
-        };
-
-        var usersRef = db.collection('users');
-        var convosRef = db.collection('conversations');
-
-
-        //check all convos
-        //check to see if already exists with receiver
-        //add to existing convo
-        //if no convos are to receiver, make a new one
-
-        var checkConvos = usersRef.doc(from).get()
-                .then(doc => {
-                    data = doc.data();
-                    var convos = data.conversations;
-
-                    var convoExists = false;
-
-                    for (var i in convos) {
-                        var id = convos[i];
-                        
-                        var checkConvo = convosRef.doc(id).get()
-                            .then(doc => {
-                                data = doc.data();
-                                    //if convo already exists with recipient
-                                    if (data.to == to){
-                                        convoExists = true;
-                                        
-                                        //update the messages and time in the conversation
-                                        var messagesArray = data.messages;
-                                        messagesArray.push(messageJSON);
-                                        var updateMany = convosRef.doc(id).update({
-                                            time: dateNTime,
-                                            messages: messagesArray,
-                                        });
-                                    }
-                            })
-                            .catch(err => {
-                                console.log('Error getting conversation', err);
-                            });
-                        if (convoExists) break;
-                    }
-
-                    if (!convoExists) {
-                        addMessage(from, to, dateNTime, messageJSON);
-                        console.log('Created new conversation!')
-                    }
-
-                })
-                .catch(err => {
-                    console.log('Error getting user', err);
-                });
+        try {
+            checkConvos(data, socket)
+        } catch(err) {
+            console.log('Error getting documents', err);
+            socket.emit('messageStatus', "failed");
+        }
     });
 
     socket.on('newUser', function (data) {
 
         //TODO: don't overwrite existing user with convos
-        //TODO: send signal to close sign up window iOS
 
         var plate = data[0].Plate.toUpperCase();
         
@@ -100,15 +45,30 @@ io.sockets.on('connection', function (socket) {
         let fName = data[0].First.charAt(0).toUpperCase() + data[0].First.slice(1).toLowerCase();
         let lName = data[0].Last.charAt(0).toUpperCase() + data[0].Last.slice(1).toLowerCase();
 
-        var data = { 
+        var dataNew = { 
             uid: data[0].uid,
             first: fName,
             last: lName,
             conversations: []
         };
-          
-          var setDoc = db.collection('users').doc(plate).set(data);
-          console.log('New user created!')
+
+        var getConvos = usersRef.doc(plate).get()
+                .then(doc => {
+                    if(!doc.exists){
+                        var setDoc = usersRef.doc(plate).set(data);
+                    } else {
+                        var updateMany = usersRef.doc(plate).update({
+                            uid: data[0].uid,
+                            first: fName,
+                            last: lName
+                        });
+                    }
+                    socket.emit('userStatus', 'created')
+                    //console.log('New user created!')
+                })
+                .catch(err => {
+                    console.log('Error getting document', err);
+                });
     });
 
     socket.on('disconnect', function (data) {
@@ -116,6 +76,57 @@ io.sockets.on('connection', function (socket) {
         //console.log('Disconnected: %s sockets connected', connections.length);
     });
 });
+
+async function checkConvos(data, socket){
+
+    var date = new Date().toLocaleDateString();
+    var time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric"});
+    var dateNTime = date + ' ' + time;
+
+    let from = data[0].from.toUpperCase();
+    let to = data[0].to.toUpperCase();
+    
+    var messageJSON = {
+        from: from,
+        message: data[0].message,
+        time: dateNTime
+    };
+
+    let checkConvos = await usersRef.doc(from).get()
+    
+    data = checkConvos.data();
+    var convos = data.conversations;
+
+    var convoExists = false;
+
+    for (var i in convos) {
+        var id = convos[i];
+        
+        let checkConvo = await convosRef.doc(id).get()
+            
+        data = checkConvo.data();
+        //if convo already exists with recipient
+        if (data.to == to){
+            convoExists = true;
+            
+            //update the messages and time in the conversation
+            var messagesArray = data.messages;
+            messagesArray.push(messageJSON);
+            var updateMany = convosRef.doc(id).update({
+                time: dateNTime,
+                messages: messagesArray,
+            });
+            break;
+        }
+    }
+
+    if (!convoExists) {
+        addMessage(from, to, dateNTime, messageJSON);
+        console.log('Created new conversation!')
+    }
+
+    socket.emit('messageStatus', "sent")
+}
 
 function addMessage(from, to, dateNTime, messageJSON){
 

@@ -95,8 +95,7 @@ class Register: UIViewController, UITextFieldDelegate {
             if isValid(email: email, password: password, fN: fName, lN: lName, license: license, state: state) {
                 Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
                     if error != nil {
-                        print(error?.localizedDescription)
-                        let alertController = UIAlertController(title: "Error", message: "An account with that email already exists", preferredStyle: .alert)
+                        let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
                         let actionOk = UIAlertAction(title: "OK",
                                                      style: .default,
                                                      handler: nil)
@@ -107,6 +106,10 @@ class Register: UIViewController, UITextFieldDelegate {
                     }
                     else {
                         // Add a new document with a generated ID
+                        
+                        _ = KeychainWrapper.standard.set(email, forKey: "Email")
+                        _ = KeychainWrapper.standard.set(password, forKey: "Password")
+                        
                         var userId = Auth.auth().currentUser?.uid
                         self.defaults.set(userId, forKey: "UID")
                         self.defaults.set(fName, forKey: "fName")
@@ -123,30 +126,23 @@ class Register: UIViewController, UITextFieldDelegate {
                         ]
                         self.socket.emit("newUser", user)
                         
-                        weak var pvc = self.presentingViewController
-                        
-                        //dismisses to sign in, then segues to main
-                        self.dismiss(animated: true) {
-                            pvc?.performSegue(withIdentifier: "toMain", sender: nil)
-                        }
+                        self.socket.on("userStatus") { data, ack in
                             
-                        /*
-                        self.db.collection("users").document(userId!).setData([
-                            "first": fName,
-                            "last": lName,
-                            "license": "\(license)\(state)"
-                        ]) { err in
-                            if let err = err {
-                                print("Error writing document: \(err)")
-                            } else {
-                                weak var pvc = self.presentingViewController
+                            guard let status = data[0] as? String else { return }
+                            
+                            if status == "created" {
+                                self.resignFirstResponder()
                                 
-                                self.dismiss(animated: true) { //dismisses to sign in, then segues to main
+                                //dismisses to sign in, then segues to main
+                                weak var pvc = self.presentingViewController
+
+                                self.dismiss(animated: true) {
                                     pvc?.performSegue(withIdentifier: "toMain", sender: nil)
+                                    self.defaults.set(true, forKey: "isUserLoggedIn")
                                 }
                             }
                         }
-                        */
+                        
                     }
                 }
             }
