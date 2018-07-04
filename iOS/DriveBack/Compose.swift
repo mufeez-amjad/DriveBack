@@ -12,6 +12,8 @@ import SocketIO
 
 class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
+    let defaults = UserDefaults.standard
+    
     @IBOutlet weak var messageInput: UITextView!
     @IBOutlet weak var recipientInput: UITextField!
     @IBOutlet weak var stateInput: UITextField!
@@ -22,10 +24,12 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     var socket: SocketIOClient!
     
+    var plate: String!
+    
     override func viewDidLoad() {
         socket = AppDelegate.socket
-
-        recipientInput.becomeFirstResponder()
+        
+        plate = defaults.string(forKey: "plate")
         
         messageInput.delegate = self
         stateInput.delegate = self
@@ -72,12 +76,14 @@ class Compose: UIViewController, UITextFieldDelegate, UITextViewDelegate {
             let address = sendTo + "" + state
             let data: [Any]  = [
                 [
+                    "from": plate,
                     "to": address,
                     "message": message
                 ]
             ]
-            self.socket.emit("message", data)
+            socket.emit("newMessage", data)
         }
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -16,7 +16,6 @@ class Intro: UIViewController {
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft))
         swipeLeft.direction = .left
         self.view.addGestureRecognizer(swipeLeft)
-        
     }
 
     override func didReceiveMemoryWarning() {
