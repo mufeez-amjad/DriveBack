@@ -27,8 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.socket = manager.defaultSocket
         AppDelegate.socket.connect()
         
-        //let userLoginStatus = defaults.bool(forKey: "isUserLoggedIn")
-        let userLoginStatus = false
+        let userLoginStatus = defaults.bool(forKey: "isUserLoggedIn")
+        //let userLoginStatus = false
         
         if (userLoginStatus) {
             self.window = UIWindow(frame: UIScreen.main.bounds)

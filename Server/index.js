@@ -35,6 +35,16 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('getConvos', function (data) {
+
+        try {
+            getConvos(data, socket)
+        } catch(err) {
+            console.log('Error getting documents', err);
+            socket.emit('messageStatus', "failed");
+        }
+    });
+
     socket.on('newUser', function (data) {
 
         //TODO: don't overwrite existing user with convos
@@ -55,7 +65,7 @@ io.sockets.on('connection', function (socket) {
         var getConvos = usersRef.doc(plate).get()
                 .then(doc => {
                     if(!doc.exists){
-                        var setDoc = usersRef.doc(plate).set(data);
+                        var setDoc = usersRef.doc(plate).set(dataNew);
                     } else {
                         var updateMany = usersRef.doc(plate).update({
                             uid: data[0].uid,
@@ -77,7 +87,49 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-async function checkConvos(data, socket){
+async function getConvos(data, socket){ //gets conversations to be displayed on the main screen
+    var plate = data;
+    
+    let getConvoIds = await usersRef.doc(plate).get()
+    var retrievedData = getConvoIds.data();
+
+    var convos = retrievedData.conversations
+
+    var messages = [];
+    
+    for (var i in convos) {
+        var id = convos[i];
+        //get last message, time and other plate
+        let checkConvo = await convosRef.doc(id).get()
+            
+        var convoData = checkConvo.data();
+        
+        var other = "";
+        if (convoData.from == plate){
+            other = convoData.to;
+        } else {
+            other = convoData.from;
+        }
+        //adds a space between state and license plate number
+        other = other.substring(0 , other.length - 2) + " " + other.substring(other.length - 2 );
+
+        var time = convoData.time;
+        //gets array of messages, retrieves message string from last message
+        var lastMessage = convoData.messages.slice(-1)[0].message;
+
+        var message = {
+            with: other,
+            time: time,
+            message: lastMessage
+        };
+
+        messages.push(message)
+    } 
+    socket.emit('convos', messages);
+    console.log(messages[0].with);
+}
+
+async function checkConvos(data, socket){ //checks for existing conversations to add messages to, or make new
 
     var date = new Date().toLocaleDateString();
     var time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric"});
@@ -106,7 +158,7 @@ async function checkConvos(data, socket){
             
         data = checkConvo.data();
         //if convo already exists with recipient
-        if (data.to == to){
+        if (data.to == to || data.to == from){
             convoExists = true;
             
             //update the messages and time in the conversation

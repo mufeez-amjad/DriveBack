@@ -19,14 +19,24 @@ class MessageTableViewCell: UITableViewCell {
     
 }
 
+struct Message: Decodable {
+    let with: String
+    let time: String
+    let message: String
+}
+
 class Main: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var plates = ["BYPY237 ON", "2COOL AB", "4SKULE BC"]
-    var messages = ["Lorem ipsum dolor sit amet, consectetur...", "Lorem ipsum dolor sit amet, consectetur...", "Lorem ipsum dolor sit amet, consectetur..."]
-    var times = ["9:10 pm", "9:05 pm", "9:00 pm"]
+    //var plates = ["BYPY237 ON", "2COOL AB", "4SKULE BC"]
+    //var messages = ["Lorem ipsum dolor sit amet, consectetur...", "Lorem ipsum dolor sit amet, consectetur...", "Lorem ipsum dolor sit amet, consectetur..."]
+    //var times = ["9:10 pm", "9:05 pm", "9:00 pm"]
     
+    var plates = [String]()
+    var times = [String]()
+    var messages = [String]()
+
     var socket: SocketIOClient!
     
     override func viewDidLoad() {
@@ -36,6 +46,26 @@ class Main: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.socket.emit("getConvos", "BYPY273ON")
+        
+        self.socket.on("convos") { data, ack in
+            print("socket connected \(data)")
+            
+            guard let data = data as? [[String: Any]] else { return }
+            
+            for index in 0...data.count {
+                self.plates.append(data[index]["with"] as! String)
+                self.times.append(data[index]["time"] as! String)
+                self.messages.append(data[index]["message"] as! String)
+            }
+            
+            DispatchQueue.main.async{
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
