@@ -24,7 +24,7 @@ let convosRef = db.collection('conversations');
 
 io.sockets.on('connection', function (socket) {
     connections.push(socket);
-    //console.log('Connected: %s sockets connected', connections.length);
+    console.log('Connected: %s sockets connected', connections.length);
 
     socket.on('newMessage', function (data) {
         try {
@@ -36,6 +36,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('getConvos', function (data) {
+        console.log("requested convos");
 
         try {
             getConvos(data, socket)
@@ -126,7 +127,6 @@ async function getConvos(data, socket){ //gets conversations to be displayed on 
         messages.push(message)
     } 
     socket.emit('convos', messages);
-    console.log(messages[0].with);
 }
 
 async function checkConvos(data, socket){ //checks for existing conversations to add messages to, or make new

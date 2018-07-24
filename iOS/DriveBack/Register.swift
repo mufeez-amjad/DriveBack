@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import Firebase
-import SocketIO
 
 class Register: UIViewController, UITextFieldDelegate {
     
@@ -37,13 +36,8 @@ class Register: UIViewController, UITextFieldDelegate {
     var licenseValid = false
     var stateValid = false
     
-    
-    var socket: SocketIOClient!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        socket = AppDelegate.socket
         
         createAccButton.backgroundColor = UIColor.white
         createAccButton.layer.cornerRadius = 10
@@ -110,7 +104,7 @@ class Register: UIViewController, UITextFieldDelegate {
                         _ = KeychainWrapper.standard.set(email, forKey: "Email")
                         _ = KeychainWrapper.standard.set(password, forKey: "Password")
                         
-                        var userId = Auth.auth().currentUser?.uid
+                        let userId = Auth.auth().currentUser?.uid
                         self.defaults.set(userId, forKey: "UID")
                         self.defaults.set(fName, forKey: "fName")
                         self.defaults.set(lName, forKey: "lName")
@@ -124,15 +118,14 @@ class Register: UIViewController, UITextFieldDelegate {
                                 "Plate": "\(license)\(state)"
                             ]
                         ]
-                        self.socket.emit("newUser", user)
                         
-                        self.socket.on("userStatus") { data, ack in
-                            
-                            guard let status = data[0] as? String else { return }
-                            
-                            if status == "created" {
+                        SocketIOManager.sharedInstance.newUser(user: user)
+                        
+                        
+                        SocketIOManager.sharedInstance.getUserStatus() { data in
+                            if data == "created" {
                                 self.resignFirstResponder()
-                                
+
                                 //dismisses to sign in, then segues to main
                                 weak var pvc = self.presentingViewController
 
@@ -142,7 +135,6 @@ class Register: UIViewController, UITextFieldDelegate {
                                 }
                             }
                         }
-                        
                     }
                 }
             }

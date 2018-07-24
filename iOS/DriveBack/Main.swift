@@ -36,32 +36,24 @@ class Main: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var plates = [String]()
     var times = [String]()
     var messages = [String]()
-
-    var socket: SocketIOClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        socket = AppDelegate.socket
         
         tableView.delegate = self
         tableView.dataSource = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.socket.emit("getConvos", "BYPY273ON")
+        SocketIOManager.sharedInstance.requestConvos(plate: "BYPY273ON")
         
-        self.socket.on("convos") { data, ack in
-            print("socket connected \(data)")
-            
-            guard let data = data as? [[String: Any]] else { return }
-            
+        SocketIOManager.sharedInstance.getConvos() { data in
             for index in 0...data.count {
                 self.plates.append(data[index]["with"] as! String)
                 self.times.append(data[index]["time"] as! String)
                 self.messages.append(data[index]["message"] as! String)
             }
-            
+
             DispatchQueue.main.async{
                 self.tableView.reloadData()
             }
@@ -77,10 +69,15 @@ class Main: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageTableViewCell
-        cell.plate?.text = plates[indexPath.row]
-        cell.message?.text = messages[indexPath.row]
-        cell.time?.text = times[indexPath.row]
+        //if (plates.count > 0){
+            let cell = self.tableView.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageTableViewCell
+            cell.plate?.text = plates[indexPath.row]
+            cell.message?.text = messages[indexPath.row]
+            cell.time?.text = times[indexPath.row]
+        //}
+        /*else {
+            add label for no messages
+        }*/
         
         return cell
     }
